@@ -30,11 +30,45 @@ Follow these steps to set up and run the application locally.
    ```sh
    git clone https://github.com/mo-saber-305/todo_list_task.git
    cd todo_list_task
+
+2. Install dependencies:
+
+   ```sh
    composer install
    npm install
+
+3. Copy the .env.example file to .env:
+
+   ```sh
    cp .env.example .env
-   php artisan key:generate
+
+ 4. Generate the application key:
+    
+    ```sh
+    php artisan key:generate
+
+5. Set up your database in the .env file:
+
+    ```sh
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=your_database_name
+    DB_USERNAME=your_username
+    DB_PASSWORD=your_password
+
+6. Run the migrations and seed the database:
+
+   ```sh
    php artisan migrate --seed
+
+7. Compile the assets:
+
+   ```sh
    npm run dev
+
+8. Serve the application:
+
+   ```sh
    php artisan serve
 
