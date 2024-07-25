@@ -14,35 +14,16 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
+        $validator = \Validator::make($request->all(), [
+            'name' => 'required|string|max:255|unique:categories',
         ]);
 
-        $category = Category::create($request->all());
-        return response()->json($category, 201);
-    }
+        if ($validator->fails()) {
+            return response()->api(false, $validator->getMessageBag()->first());
+        }
 
-    public function show($id)
-    {
-        $category = Category::findOrFail($id);
-        return response()->json($category);
-    }
 
-    public function update(Request $request, $id)
-    {
-        $category = Category::findOrFail($id);
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
-
-        $category->update($request->all());
-        return response()->json($category);
-    }
-
-    public function destroy($id)
-    {
-        $category = Category::findOrFail($id);
-        $category->delete();
-        return response()->noContent();
+        $category = Category::create(['name' => $request->name]);
+        return response()->api(true, 'Category Data', $category);
     }
 }

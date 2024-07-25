@@ -7,9 +7,14 @@
             </div>
             <form id="categoryForm">
                 <div class="modal-body">
+                    <div class="alert alert-danger alert-dismissible fade show my-3 d-none" role="alert">
+                        <strong></strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
                     <div class="form-group">
                         <label for="categoryName"><strong>Category Name:</strong></label>
-                        <input type="text" class="form-control" id="categoryName" required>
+                        <input type="text" class="form-control" id="categoryName">
                     </div>
                 </div>
                 <div class="modal-footer">

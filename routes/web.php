@@ -24,7 +24,8 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware('auth')->group(function () {
-    Route::resource('tasks', TaskController::class);
-    Route::resource('categories', CategoryController::class);
+    Route::apiResource('tasks', TaskController::class);
+    Route::apiResource('categories', CategoryController::class);
     Route::post('tasks/{id}/restore', [TaskController::class, 'restore']);
+    Route::post('tasks/{id}/complete', [TaskController::class, 'complete']);
 });
