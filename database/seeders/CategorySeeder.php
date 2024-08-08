@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
 
 class CategorySeeder extends Seeder
 {
@@ -13,14 +13,18 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        $categories = [
-            ['name' => 'Work'],
-            ['name' => 'Personal'],
-            ['name' => 'Urgent'],
-        ];
+        $jsonPath = database_path('data/categories.json');
+
+        if (! File::exists($jsonPath)) {
+            return;
+        }
+
+        $categories = json_decode(File::get($jsonPath), true);
 
         foreach ($categories as $category) {
-            Category::create($category);
+            Category::updateOrCreate(['id' => $category['id']], [
+                'name' => $category['name'],
+            ]);
         }
     }
 }

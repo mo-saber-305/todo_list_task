@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->enum('status', ['pending', 'completed'])->default('pending');
+            $table->unsignedInteger('order')->default(0)->index();
             $table->softDeletes();
             $table->timestamps();
         });

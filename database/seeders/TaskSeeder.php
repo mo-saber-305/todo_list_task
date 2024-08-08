@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
 use App\Models\Task;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\File;
 
 class TaskSeeder extends Seeder
 {
@@ -13,32 +14,33 @@ class TaskSeeder extends Seeder
      */
     public function run(): void
     {
-        $tasks = [
-            [
-                'title' => 'Saepe vero impedit',
-                'description' => 'Incididunt autem neq Incididunt autem neq',
-                'category_id' => 1,
-                'status' => 'pending',
-            ],[
-                'title' => 'In velit et vero dol',
-                'description' => 'Sed quisquam veniam',
-                'category_id' => 3,
-                'status' => 'completed',
-            ],[
-                'title' => 'Voluptate quis sint',
-                'description' => 'Sed quisquam veniam Sed quisquam veniam',
-                'category_id' => null,
-                'status' => 'completed',
-            ],[
-                'title' => 'Qui laudantium cons',
-                'description' => null,
-                'category_id' => 2,
-                'status' => 'pending',
-            ],
-        ];
+        $jsonPath = database_path('data/tasks.json');
 
-        foreach ($tasks as $task) {
-            Task::create($task);
+        if (! File::exists($jsonPath)) {
+            return;
+        }
+
+        $tasksData = json_decode(File::get($jsonPath), true);
+
+        // Clear existing tasks
+        Task::withTrashed()->forceDelete();
+
+        foreach ($tasksData as $index => $data) {
+            $createdAt = Carbon::now()->subDays($data['days_ago'] ?? 0);
+
+            $task = Task::create([
+                'title' => $data['title'],
+                'description' => $data['description'],
+                'category_id' => $data['category_id'],
+                'status' => $data['status'],
+                'order' => $index + 1,
+                'created_at' => $createdAt,
+                'updated_at' => $createdAt,
+            ]);
+
+            if (! empty($data['is_deleted'])) {
+                $task->delete();
+            }
         }
     }
 }

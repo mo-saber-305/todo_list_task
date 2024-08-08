@@ -1,0 +1,402 @@
+[
+  {
+    "title": "Refactor monolithic controllers into dedicated Service classes",
+    "description": "Extract business logic from TaskController and CategoryController into testable service layers following Clean Architecture.",
+    "category_id": 1,
+    "status": "completed",
+    "days_ago": 15,
+    "is_deleted": false
+  },
+  {
+    "title": "Implement Redis caching layer for high-throughput queries",
+    "description": "Cache filtered task list responses and cache invalidation on model observer events to optimize database load.",
+    "category_id": 1,
+    "status": "pending",
+    "days_ago": 14,
+    "is_deleted": false
+  },
+  {
+    "title": "Enforce strict DTO contracts for API request validation",
+    "description": "Create immutable Data Transfer Objects (DTOs) for task creation, status transition, and payload normalization.",
+    "category_id": 1,
+    "status": "completed",
+    "days_ago": 13,
+    "is_deleted": false
+  },
+  {
+    "title": "Optimize MySQL indexing on composite filter columns",
+    "description": "Add compound indices on (status, category_id, created_at) to ensure sub-10ms query execution times.",
+    "category_id": 1,
+    "status": "pending",
+    "days_ago": 12,
+    "is_deleted": false
+  },
+  {
+    "title": "Set up Event-Driven Architecture for Task Lifecycle notifications",
+    "description": "Dispatch TaskCreated and TaskCompleted domain events with asynchronous queued listener handlers.",
+    "category_id": 1,
+    "status": "completed",
+    "days_ago": 11,
+    "is_deleted": true
+  },
+  {
+    "title": "Implement Rate Limiting on public REST API endpoints",
+    "description": "Configure Redis token bucket throttle per authenticated IP and user token (60 requests/min).",
+    "category_id": 1,
+    "status": "pending",
+    "days_ago": 10,
+    "is_deleted": false
+  },
+  {
+    "title": "Write comprehensive Pest unit tests for TaskService",
+    "description": "Achieve 90%+ code coverage on filtering edge cases, soft deletes, and status toggle transitions.",
+    "category_id": 1,
+    "status": "completed",
+    "days_ago": 9,
+    "is_deleted": false
+  },
+  {
+    "title": "Implement database transactions with dead-lock retry mechanism",
+    "description": "Wrap multi-table batch updates in DB::transaction with 3 automatic retries for concurrent requests.",
+    "category_id": 1,
+    "status": "pending",
+    "days_ago": 8,
+    "is_deleted": false
+  },
+  {
+    "title": "Build automated database schema documentation generator",
+    "description": "Integrate doctrine dbal introspection to generate interactive Markdown schema diagrams in CI.",
+    "category_id": 1,
+    "status": "completed",
+    "days_ago": 7,
+    "is_deleted": false
+  },
+  {
+    "title": "Configure Horizon queue monitoring for background jobs",
+    "description": "Deploy Laravel Horizon dashboard with alerts for long-waiting jobs and memory leak thresholds.",
+    "category_id": 1,
+    "status": "pending",
+    "days_ago": 6,
+    "is_deleted": false
+  },
+  {
+    "title": "Configure multi-stage Docker build with Alpine PHP-FPM",
+    "description": "Optimize Docker image size from 850MB to 110MB with production OPcache preloading and non-root user.",
+    "category_id": 2,
+    "status": "completed",
+    "days_ago": 15,
+    "is_deleted": false
+  },
+  {
+    "title": "Set up GitHub Actions CI pipeline for PHPStan Level 8",
+    "description": "Automate static analysis, Pint code styling enforcement, and security vulnerability scanning on pull requests.",
+    "category_id": 2,
+    "status": "completed",
+    "days_ago": 14,
+    "is_deleted": false
+  },
+  {
+    "title": "Deploy Nginx reverse proxy with HTTP/3 & Brotli compression",
+    "description": "Tune worker processes, buffer sizes, and TLS 1.3 cipher suites for high concurrency.",
+    "category_id": 2,
+    "status": "pending",
+    "days_ago": 13,
+    "is_deleted": false
+  },
+  {
+    "title": "Implement zero-downtime deployment script with Envoy",
+    "description": "Configure atomic symlink switching, config caching, and automatic health check rollback triggers.",
+    "category_id": 2,
+    "status": "pending",
+    "days_ago": 12,
+    "is_deleted": true
+  },
+  {
+    "title": "Setup Prometheus & Grafana metrics for PHP-FPM performance",
+    "description": "Monitor active processes, request queue duration, and CPU/RAM consumption per container.",
+    "category_id": 2,
+    "status": "completed",
+    "days_ago": 11,
+    "is_deleted": false
+  },
+  {
+    "title": "Configure automated encrypted daily MySQL backups to S3",
+    "description": "Setup mysqldump cron with AES-256 encryption, lifecycle expiration, and Slack notification on success/fail.",
+    "category_id": 2,
+    "status": "completed",
+    "days_ago": 10,
+    "is_deleted": false
+  },
+  {
+    "title": "Create staging environment with isolated Docker Compose network",
+    "description": "Mirror production configuration with seed data generator for end-to-end integration testing.",
+    "category_id": 2,
+    "status": "pending",
+    "days_ago": 9,
+    "is_deleted": false
+  },
+  {
+    "title": "Setup Cloudflare WAF rules & DDoS mitigation",
+    "description": "Block malicious bot user-agents and enforce strict rate limits on authentication endpoints.",
+    "category_id": 2,
+    "status": "completed",
+    "days_ago": 8,
+    "is_deleted": false
+  },
+  {
+    "title": "Configure log rotation and centralized shipping to OpenSearch",
+    "description": "Ship Laravel structured JSON log stack to ELK with automated indexing and retention policies.",
+    "category_id": 2,
+    "status": "pending",
+    "days_ago": 7,
+    "is_deleted": false
+  },
+  {
+    "title": "Audit SSL/TLS certificate auto-renewal via Let's Encrypt",
+    "description": "Verify certbot renew timers and add fallback DNS-01 challenge verification hooks.",
+    "category_id": 2,
+    "status": "completed",
+    "days_ago": 6,
+    "is_deleted": false
+  },
+  {
+    "title": "Design cohesive modern SaaS Dashboard layout",
+    "description": "Implement clean typography with Plus Jakarta Sans, neutral slate palette, and responsive breakpoints.",
+    "category_id": 3,
+    "status": "completed",
+    "days_ago": 15,
+    "is_deleted": false
+  },
+  {
+    "title": "Implement debounced live search with asynchronous pagination",
+    "description": "Add 400ms debounce timer on search inputs to eliminate unnecessary server hits during typing.",
+    "category_id": 3,
+    "status": "completed",
+    "days_ago": 14,
+    "is_deleted": false
+  },
+  {
+    "title": "Build interactive Modal dialogs for Task and Category workflows",
+    "description": "Implement seamless AJAX form submission, inline error validation, and auto-dismissing toast alerts.",
+    "category_id": 3,
+    "status": "completed",
+    "days_ago": 13,
+    "is_deleted": true
+  },
+  {
+    "title": "Add keyboard shortcuts for fast task management",
+    "description": "Support Ctrl+K for global quick search, Esc to close modals, and N to open new task form.",
+    "category_id": 3,
+    "status": "pending",
+    "days_ago": 12,
+    "is_deleted": false
+  },
+  {
+    "title": "Implement dark mode theme switch with CSS custom properties",
+    "description": "Support system preference media query and persistent user selection in localStorage.",
+    "category_id": 3,
+    "status": "pending",
+    "days_ago": 11,
+    "is_deleted": false
+  },
+  {
+    "title": "Refactor icons to modern vector SVG library (Bootstrap Icons)",
+    "description": "Replace legacy PNG asset files with crisp scalable vector glyphs and hover tooltips.",
+    "category_id": 3,
+    "status": "completed",
+    "days_ago": 10,
+    "is_deleted": false
+  },
+  {
+    "title": "Optimize Core Web Vitals (LCP, CLS, INP) for dashboard",
+    "description": "Eliminate layout shifts by enforcing explicit table column widths and preloading critical web fonts.",
+    "category_id": 3,
+    "status": "completed",
+    "days_ago": 9,
+    "is_deleted": false
+  },
+  {
+    "title": "Add micro-animations for task completion status toggle",
+    "description": "Implement subtle scale and color transitions when toggling task state between pending and completed.",
+    "category_id": 3,
+    "status": "pending",
+    "days_ago": 8,
+    "is_deleted": false
+  },
+  {
+    "title": "Improve mobile viewport responsiveness on filter controls",
+    "description": "Stack search inputs and filter dropdowns into collapsible mobile drawer on screen widths <768px.",
+    "category_id": 3,
+    "status": "pending",
+    "days_ago": 7,
+    "is_deleted": false
+  },
+  {
+    "title": "Design empty-state illustrations and actionable placeholders",
+    "description": "Display user-friendly empty states with direct creation call-to-action when search yields no matches.",
+    "category_id": 3,
+    "status": "completed",
+    "days_ago": 6,
+    "is_deleted": false
+  },
+  {
+    "title": "Conduct OWASP Top 10 security audit & vulnerability review",
+    "description": "Verify SQL Injection protection across raw queries, XSS sanitization in Blade, and CSRF token enforcement.",
+    "category_id": 4,
+    "status": "completed",
+    "days_ago": 15,
+    "is_deleted": false
+  },
+  {
+    "title": "Implement Content Security Policy (CSP) headers in middleware",
+    "description": "Restrict script, style, and iframe sources to prevent Cross-Site Scripting (XSS) attacks.",
+    "category_id": 4,
+    "status": "completed",
+    "days_ago": 14,
+    "is_deleted": true
+  },
+  {
+    "title": "Enforce Argon2id password hashing with custom memory cost",
+    "description": "Upgrade default bcrypt password hasher to Argon2id with 64MB memory and 4 thread cost parameters.",
+    "category_id": 4,
+    "status": "pending",
+    "days_ago": 13,
+    "is_deleted": false
+  },
+  {
+    "title": "Implement Two-Factor Authentication (2FA) via TOTP",
+    "description": "Add Google Authenticator TOTP support with recovery codes and session challenge step.",
+    "category_id": 4,
+    "status": "pending",
+    "days_ago": 12,
+    "is_deleted": false
+  },
+  {
+    "title": "Setup automated dependency vulnerability scanning with Dependabot",
+    "description": "Configure daily Composer and npm package audit alerts with automated security pull requests.",
+    "category_id": 4,
+    "status": "completed",
+    "days_ago": 11,
+    "is_deleted": false
+  },
+  {
+    "title": "Audit Sanctum API token expiration and revocation policies",
+    "description": "Enforce 30-day token lifetime and build user dashboard to revoke active device sessions.",
+    "category_id": 4,
+    "status": "completed",
+    "days_ago": 10,
+    "is_deleted": false
+  },
+  {
+    "title": "Implement audit log trail for sensitive administrative actions",
+    "description": "Record user ID, IP address, user agent, and timestamp on all delete, restore, and role modification actions.",
+    "category_id": 4,
+    "status": "pending",
+    "days_ago": 9,
+    "is_deleted": false
+  },
+  {
+    "title": "Configure strict CORS policy for decoupled mobile APIs",
+    "description": "Whitelist only verified staging and production domains with strict allowed HTTP methods.",
+    "category_id": 4,
+    "status": "completed",
+    "days_ago": 8,
+    "is_deleted": false
+  },
+  {
+    "title": "Add honeypot anti-spam protection on registration forms",
+    "description": "Integrate invisible timestamp and hidden field verification to block automated credential scrapers.",
+    "category_id": 4,
+    "status": "pending",
+    "days_ago": 7,
+    "is_deleted": false
+  },
+  {
+    "title": "Enforce secure cookie attributes (SameSite=Strict, Secure, HttpOnly)",
+    "description": "Verify session cookie configuration to prevent session hijacking and cross-site request forgery.",
+    "category_id": 4,
+    "status": "completed",
+    "days_ago": 6,
+    "is_deleted": false
+  },
+  {
+    "title": "Architect multi-gateway payment driver interface (Paymob & Stripe)",
+    "description": "Build unified PaymentGatewayInterface with charge, refund, and webhook processing contracts.",
+    "category_id": 5,
+    "status": "completed",
+    "days_ago": 15,
+    "is_deleted": true
+  },
+  {
+    "title": "Implement HMAC SHA512 Webhook signature verification",
+    "description": "Verify incoming payment notification authenticity before transitioning order transaction states.",
+    "category_id": 5,
+    "status": "completed",
+    "days_ago": 14,
+    "is_deleted": false
+  },
+  {
+    "title": "Build automated idempotent webhook retry mechanism",
+    "description": "Prevent double-billing on duplicate webhook callbacks by locking on transaction reference IDs.",
+    "category_id": 5,
+    "status": "pending",
+    "days_ago": 13,
+    "is_deleted": false
+  },
+  {
+    "title": "Integrate OpenAI GPT-4 API for automated task summary generation",
+    "description": "Build asynchronous worker to summarize long task descriptions and generate actionable bullet points.",
+    "category_id": 5,
+    "status": "completed",
+    "days_ago": 12,
+    "is_deleted": false
+  },
+  {
+    "title": "Add Fawry Payment Gateway driver with reference code generation",
+    "description": "Support cash at retail store payments with automated expiration and status polling cron.",
+    "category_id": 5,
+    "status": "pending",
+    "days_ago": 11,
+    "is_deleted": false
+  },
+  {
+    "title": "Integrate Slack & Discord incoming webhooks for team alerts",
+    "description": "Post rich embed notification cards when urgent priority tasks are created or updated.",
+    "category_id": 5,
+    "status": "completed",
+    "days_ago": 10,
+    "is_deleted": false
+  },
+  {
+    "title": "Build CSV & Excel task report export service",
+    "description": "Stream large datasets directly to browser using League CSV to prevent memory exhaustion.",
+    "category_id": 5,
+    "status": "pending",
+    "days_ago": 9,
+    "is_deleted": false
+  },
+  {
+    "title": "Setup Google Calendar two-way synchronization for deadlines",
+    "description": "Sync task due dates to user Google Calendar via OAuth2 Google API client.",
+    "category_id": 5,
+    "status": "pending",
+    "days_ago": 8,
+    "is_deleted": false
+  },
+  {
+    "title": "Build PDF Invoice & Receipt generator with DomPDF",
+    "description": "Render customized branded invoices with QR code verification and automated customer emailing.",
+    "category_id": 5,
+    "status": "completed",
+    "days_ago": 7,
+    "is_deleted": false
+  },
+  {
+    "title": "Implement Telegram Bot for instant mobile task notifications",
+    "description": "Allow users to receive real-time task alerts and mark items completed directly via Telegram inline buttons.",
+    "category_id": 5,
+    "status": "pending",
+    "days_ago": 6,
+    "is_deleted": false
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "Backend Architecture"
+  },
+  {
+    "id": 2,
+    "name": "DevOps & Infrastructure"
+  },
+  {
+    "id": 3,
+    "name": "UI/UX & Frontend"
+  },
+  {
+    "id": 4,
+    "name": "Security & Auditing"
+  },
+  {
+    "id": 5,
+    "name": "Payment & Integrations"
+  }
+]
