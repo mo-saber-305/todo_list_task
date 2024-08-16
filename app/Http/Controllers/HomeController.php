@@ -2,27 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Services\CategoryService;
+use Illuminate\Contracts\View\View;
 
 class HomeController extends Controller
 {
+    protected CategoryService $categoryService;
+
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
-    public function __construct()
+    public function __construct(CategoryService $categoryService)
     {
         $this->middleware('auth');
+        $this->categoryService = $categoryService;
     }
 
     /**
      * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(): View
     {
-        return view('home');
+        $categories = $this->categoryService->getAllCategories();
+
+        return view('home', compact('categories'));
     }
 }

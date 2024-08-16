@@ -2,218 +2,140 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
+use App\Services\TaskService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function index(Request $request)
+    protected TaskService $taskService;
+
+    public function __construct(TaskService $taskService)
+    {
+        $this->taskService = $taskService;
+    }
+
+    /**
+     * Display a paginated listing of tasks with dynamic filtering.
+     */
+    public function index(Request $request): JsonResponse
     {
         try {
-            $query = Task::query();
+            $tasks = $this->taskService->getFilteredTasks($request->all(), 10);
+            $html = view('partials._task_rows', compact('tasks'))->render();
 
-
-            if ($request->type == 'trash') {
-                $query = $query->onlyTrashed();
-            }
-
-            if ($request->category) {
-                $query = $query->where('category_id', $request->category);
-            }
-
-            if ($request->status) {
-                $query = $query->where('status', $request->status);
-            }
-
-            if ($request->search) {
-                $query = $query->where(function ($q) use ($request) {
-                    $q->where('title', 'like', '%' . $request->search . '%')
-                        ->orWhere('description', 'like', '%' . $request->search . '%');
-                });
-            }
-
-            $tasks = $query->latest()->paginate(3);
-
-            $data = '';
-
-            if (count($tasks)) {
-                foreach ($tasks as $task) {
-                    $categoryName = $task->category ? $task->category->name : '-------';
-                    $taskDescription = $task->description ? $task->description : '-------';
-                    if ($task->status == 'completed') {
-                        $icon = 'undo_icon.png';
-                        $tooltipText = 'Make As Pending';
-                    } else {
-                        $icon = 'check_circle_icon.png';
-                        $tooltipText = 'Make As Completed';
-                    }
-
-                    $data .= '<tr class="fw-normal">
-                                <td class="align-middle text-secondary fw-bold">' . $task->title . '</td>
-                                <td class="align-middle text-secondary fw-bold">' . $taskDescription . '</td>
-                                <td class="align-middle text-secondary fw-bold">' . $categoryName . '</td>
-                                <td class="align-middle">
-                                    <h6 class="mb-0">
-                                    <span class="badge ' . ($task->status == 'completed' ? 'bg-success' : 'bg-primary') . '">' . $task->status . '</span>
-                                    </h6>
-                                </td>
-                                 <td class="align-middle text-secondary fw-bold">' . $task->created_at->diffForHumans() . '</td>
-                                <td class="align-middle">';
-                    if ($request->type == 'trash') {
-                        $data .= '<button class="btn px-1 task-restore-btn" data-id="' . $task->id . '">
-                                        <img src="' . asset('assets/img/restore_icon.png') . '" width="20" alt="restore icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Restore Task">
-                                    </button>';
-                    } else {
-                        $data .= '<button class="btn px-1" onclick="completeTask(' . $task->id . ', ' . '\'' . $task->status .'\'' . ')" data-bs-toggle="tooltip" data-bs-placement="top" title="' . $tooltipText . '">
-                                        <img src="' . asset('assets/img/' . $icon) . '" width="20" alt="edit icon">
-                                    </button>
-                                    <button class="btn px-1" onclick="editTask(' . $task->id . ')" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Task">
-                                        <img src="' . asset('assets/img/edit_icon.png') . '" width="20" alt="edit icon">
-                                    </button>
-                                    <button class="btn px-1 task-delete-btn" data-id="' . $task->id . '">
-                                        <img src="' . asset('assets/img/trash_icon.png') . '" width="20" alt="trash icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Task">
-                                    </button>';
-                    }
-
-                    $data .= '</td>
-                            </tr>';
-                }
-            } else {
-                $data .= '<tr class="fw-normal" >
-                                <th class="align-middle text-secondary" colspan="6">There are no tasks currently available</th>
-                          </tr>';
-            }
-
-
-            return response()->api(true, 'Tasks Data', $data, $tasks->hasMorePages());
-
+            return response()->api(true, 'Tasks Data', $html, $tasks->hasMorePages());
         } catch (\Exception $e) {
-            return response()->api(false, 'There was an error, please try again later');
+            return response()->api(false, 'There was an error loading tasks');
         }
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created task in storage.
+     */
+    public function store(StoreTaskRequest $request): JsonResponse
     {
         try {
-            $validator = \Validator::make($request->all(), [
-                'title' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'category_id' => 'nullable|exists:categories,id',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->api(false, $validator->getMessageBag()->first());
-            }
-
-            $task = Task::create([
-                'title' => $request->title,
-                'description' => $request->description,
-                'category_id' => $request->category_id,
-            ]);
+            $task = $this->taskService->createTask($request->validated());
 
             return response()->api(true, 'Task has been created successfully', $task);
         } catch (\Exception $e) {
-            return response()->api(false, 'There was an error, please try again later');
+            return response()->api(false, 'There was an error creating the task');
         }
     }
 
-    public function show($id)
+    /**
+     * Display the specified task details.
+     */
+    public function show(int|string|Task $id): JsonResponse
     {
         try {
-            $task = Task::find($id);
-            if (!$task) {
-                return response()->api(false, 'The task you want to edit does not exist');
-            }
+            $task = $id instanceof Task ? $id : Task::findOrFail($id);
 
             return response()->api(true, 'Task data', $task);
         } catch (\Exception $e) {
-            return response()->api(false, 'There was an error, please try again later');
+            return response()->api(false, 'The requested task does not exist');
         }
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified task in storage.
+     */
+    public function update(UpdateTaskRequest $request, int|string|Task $id): JsonResponse
     {
         try {
-            $validator = \Validator::make($request->all(), [
-                'title' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'category_id' => 'nullable|exists:categories,id',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->api(false, $validator->getMessageBag()->first());
-            }
-
-            $task = Task::find($id);
-            if (!$task) {
-                return response()->api(false, 'The task you want to modify does not exist');
-            }
-
-            $task->update([
-                'title' => $request->title,
-                'description' => $request->description,
-                'category_id' => $request->category_id,
-            ]);
+            $task = $id instanceof Task ? $id : Task::findOrFail($id);
+            $this->taskService->updateTask($task, $request->validated());
 
             return response()->api(true, 'Task has been updated successfully', $task);
         } catch (\Exception $e) {
-            return response()->api(false, 'There was an error, please try again later');
+            return response()->api(false, 'There was an error updating the task');
         }
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified task from storage (Soft Delete).
+     */
+    public function destroy(int|string|Task $id): JsonResponse
     {
         try {
-            $task = Task::find($id);
-            if (!$task) {
-                return response()->api(false, 'The task you want to delete does not exist');
-            }
+            $task = $id instanceof Task ? $id : Task::findOrFail($id);
+            $this->taskService->deleteTask($task);
 
-            $task->delete();
-
-            return response()->api(true, 'Task has been deleted successfully', $task);
+            return response()->api(true, 'Task has been moved to trash', $task);
         } catch (\Exception $e) {
-            return response()->api(false, 'There was an error, please try again later');
+            return response()->api(false, 'There was an error deleting the task');
         }
     }
 
-    public function restore($id)
+    /**
+     * Restore the specified soft-deleted task from trash.
+     */
+    public function restore(int|string $id): JsonResponse
     {
         try {
-            $task = Task::withTrashed()->find($id);
-
-            if (!$task) {
-                return response()->api(false, 'The task you want to restore does not exist');
-            }
-
-            $task->restore();
+            $task = $this->taskService->restoreTask($id);
 
             return response()->api(true, 'Task has been restored successfully', $task);
         } catch (\Exception $e) {
-            return response()->api(false, 'There was an error, please try again later');
+            return response()->api(false, 'There was an error restoring the task');
         }
     }
 
-    public function complete($id, Request $request)
+    /**
+     * Toggle the status of the specified task (Pending <-> Completed).
+     */
+    public function complete(Request $request, int|string|Task $id): JsonResponse
     {
         try {
-            $task = Task::find($id);
+            $task = $id instanceof Task ? $id : Task::findOrFail($id);
+            $this->taskService->toggleTaskStatus($task);
 
-            if (!$task) {
-                return response()->api(false, 'The task you want to change status does not exist');
-            }
-
-            if ($request->status == 'completed') {
-                $status = 'pending';
-            } else {
-                $status = 'completed';
-            }
-
-            $task->update(['status' => $status]);
-
-            return response()->api(true, 'Task has been updated status successfully', $task);
+            return response()->api(true, 'Task status updated successfully', $task);
         } catch (\Exception $e) {
-            return response()->api(false, 'There was an error, please try again later');
+            return response()->api(false, 'There was an error updating task status');
+        }
+    }
+
+    /**
+     * Reorder task positions (Drag & Drop).
+     */
+    public function reorder(Request $request): JsonResponse
+    {
+        $request->validate([
+            'ordered_ids' => ['required', 'array'],
+            'ordered_ids.*' => ['required', 'integer'],
+        ]);
+
+        try {
+            $this->taskService->reorderTasks($request->input('ordered_ids'));
+
+            return response()->api(true, 'Tasks reordered successfully');
+        } catch (\Exception $e) {
+            return response()->api(false, 'Failed to update tasks order');
         }
     }
 }
